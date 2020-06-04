@@ -5,4 +5,4 @@ include_directories("include")
 
 set(CMAKE_CXX_FLAGS "-Wall")
 
-add_executable(game src/main.cpp)
+add_executable(game src/main.cpp src/map.cpp)
