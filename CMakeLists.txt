@@ -4,5 +4,6 @@ project(TicTacToe)
 include_directories("include")
 
 set(CMAKE_CXX_FLAGS "-Wall")
+set(SOURCE src/main.cpp src/map.cpp src/tictactoe.cpp)
 
-add_executable(game src/main.cpp src/map.cpp)
+add_executable(game ${SOURCE})
