@@ -10,6 +10,7 @@ class Map {
 
     char check_win();
 protected:
+    int filled = 0;// aka size and moves count
     char map[3][3];
     void set_field();
     void v_fill_point(int x, int y, char value);

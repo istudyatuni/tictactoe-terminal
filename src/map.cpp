@@ -13,16 +13,8 @@ void Map::set_field() {
 }
 
 void Map::v_fill_point(int x, int y, char value) {
-    if ((x > 2 || x < 0) && (y > 2 || y < 0)) {
-        return;
-    }
-    x++;
-    y = (y + 1) * 2;
-    if (field[x][y] != ' '){
-        return;
-    }
-    field[x][y] = value;
-    map[x - 1][y / 2 - 1] = value;
+    bool t = fill_point(x, y, value);
+    return;
 }
 
 char Map::check_win() {
@@ -65,8 +57,13 @@ bool Map::fill_point(int x, int y, char value) {
 }
 bool Map::win() {
     char w = check_win();
+    cout << "filled: " << filled << '\n';
     if (w != ' ') {
         cout << '\n' << w << " is win!\n";
+        return true;
+    }
+    if (filled == 9) {
+        cout << "Drawn game\n";
         return true;
     }
     return false;

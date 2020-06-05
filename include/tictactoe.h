@@ -7,9 +7,15 @@
 class Tictactoe:
     public Map {
     char player, env;
-    char win_right_now(char player, char opponent);
+    bool win_right_now(char player, char opponent);
     bool check_line(char a, char b,int x, int y,
                 char p, char o);//x, y for map[][]
+    void env_move(int x, int y);
+
+    enum Place { NONE, CENTER, ANGLE, SIDE };
+    int move;
+    int first_move = NONE;
+    int check_place(int x, int y);
 public:
     Tictactoe() {
     }
