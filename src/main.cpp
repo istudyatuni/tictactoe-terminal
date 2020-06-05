@@ -4,6 +4,6 @@ using namespace std;
 
 int main() {
     Tictactoe game;
-    game.pve();
+    game.play();
     return 0;
 }

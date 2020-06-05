@@ -17,11 +17,12 @@ class Tictactoe:
     int move;
     int first_move = NONE;
     int check_place(int x, int y);
+    void pvp();
+    void pve();
 public:
     Tictactoe() {
     }
-    void pvp();
-    void pve();
+    void play();
 };
 
 #endif // TIC_TAC_TOE_H

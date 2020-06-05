@@ -265,3 +265,16 @@ void Tictactoe::pve() {
         }
     } while(s == ',');
 }
+
+void Tictactoe::play() {
+    int mode;
+    cout << "Choose mode (1 - pve, 2 - pvp): ";
+    cin >> mode;
+    if (mode == 1) {
+        pve();
+    } else if (mode == 2) {
+        pvp();
+    } else {
+        cout << "Incorrect\n";
+    }
+}
