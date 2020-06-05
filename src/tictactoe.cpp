@@ -80,7 +80,7 @@ void Tictactoe::env_move(int x, int y) {
             a = i / 3;
             b = i % 3;
             if (map[a][b] == ' ' && check_place(a, b) == ANGLE) {
-                map[a][b] = env;
+                v_fill_point(a, b, env);
                 print_field();
                 return;
             }
@@ -90,7 +90,7 @@ void Tictactoe::env_move(int x, int y) {
             a = i / 3;
             b = i % 3;
             if (map[a][b] == ' ' && check_place(a, b) == SIDE) {
-                map[a][b] = env;
+                v_fill_point(a, b, env);
                 print_field();
                 return;
             }
@@ -99,7 +99,7 @@ void Tictactoe::env_move(int x, int y) {
     if (first_move == ANGLE) {
         if (filled == 1) {
             // move to center
-            map[1][1] = env;
+            v_fill_point(1, 1, env);
             print_field();
             return;
         }
@@ -109,7 +109,7 @@ void Tictactoe::env_move(int x, int y) {
             // -0-
             // X--
             // just random SIDE place
-            map[0][1] = env;
+            v_fill_point(0, 1, env);
             print_field();
             return;
         }
@@ -123,17 +123,74 @@ void Tictactoe::env_move(int x, int y) {
             a = y;
             b = firstx;
             if (check_place(a, b) == ANGLE) {
-                map[a][b] = env;
+                v_fill_point(a, b, env);
                 print_field();
                 return;
             }
             a = firsty;
             b = x;
             if (check_place(a, b) == ANGLE) {
-                map[a][b] = env;
+                v_fill_point(a, b, env);
                 print_field();
                 return;
             }
+        }
+    }
+    if (first_move == SIDE) {
+        if (filled == 1) {
+            // move to center
+            v_fill_point(1, 1, env);
+            print_field();
+            return;
+        }
+        if (move == ANGLE) {
+            if (filled == 5) {
+                // in this case:
+                // 0X0 <- set in angle
+                // X0-
+                // --X
+                // один из двух углов ниже занят, так что
+                // не сломается
+                cout << "fl\n";
+                v_fill_point(0, 0, env);
+                v_fill_point(2, 0, env);
+                print_field();
+                return;
+            }
+            if (x == 0 && x == y) {
+                // angle (0, 0)
+                v_fill_point(2, 2, env);
+                print_field();
+                return;
+            }
+            if (x != y) {
+                // angle (x, y)
+                v_fill_point(y, x, env);
+                print_field();
+                return;
+            }
+            if (x == 2 && x == y) {
+                // angle (2, 2)
+                v_fill_point(0, 0, env);
+                print_field();
+                return;
+            }
+        }
+        if (move == SIDE) {
+            if (x == firstx || y == firsty) {
+                // противоположная сторона
+                // just random angle
+                v_fill_point(0, 0, env);
+                print_field();
+                return;
+            }
+            // position as:
+            // -X0 <- here
+            // -0X
+            // ---
+            v_fill_point(x + firstx - 1, y + firsty - 1, env);
+            print_field();
+            return;
         }
     }
 }
