@@ -57,7 +57,6 @@ bool Map::fill_point(int x, int y, char value) {
 }
 bool Map::win() {
     char w = check_win();
-    cout << "filled: " << filled << '\n';
     if (w != ' ') {
         cout << '\n' << w << " is win!\n";
         return true;

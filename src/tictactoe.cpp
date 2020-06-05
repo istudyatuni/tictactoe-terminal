@@ -3,7 +3,7 @@
 using std::cout;
 using std::cin;
 
-bool Tictactoe::check_line(char a, char b, int x, int y,
+bool Tictactoe::win_check_line(char a, char b, int x, int y,
                     char p, char o) {//x, y for map[][]
     if (map[x][y] == ' ' && a == b) {
         if (a == p) {//player может выиграть
@@ -25,26 +25,26 @@ bool Tictactoe::win_right_now(char player, char opponent) {
             // rows
             a = map[i][(j + 1) % 3];
             b = map[i][(j + 2) % 3];
-            if (check_line(a, b, i, j, player, opponent)) {
+            if (win_check_line(a, b, i, j, player, opponent)) {
                 return true;
             }
             // columns
             a = map[(j + 1) % 3][i];
             b = map[(j + 2) % 3][i];
-            if (check_line(a, b, j, i, player, opponent)) {
+            if (win_check_line(a, b, j, i, player, opponent)) {
                 return true;
             }
         }
         // main diagonal
         a = map[(i + 1) % 3][(i + 1) % 3];
         b = map[(i + 2) % 3][(i + 2) % 3];
-        if (check_line(a, b, i, i, player, opponent)) {
+        if (win_check_line(a, b, i, i, player, opponent)) {
             return true;
         }
         // anti-diagonal
         a = map[(i + 1) % 3][(i + 2) * 2 % 3];
         b = map[(i + 2) % 3][(i + 3) * 2 % 3];
-        if (check_line(a, b, i, (i + 1) * 2 % 3, player, opponent)) {
+        if (win_check_line(a, b, i, (i + 1) * 2 % 3, player, opponent)) {
             return true;
         }
     }
@@ -55,7 +55,7 @@ int Tictactoe::check_place(int x, int y) {
     // in map 3x3
     if ((x == 0 && y == 0) ||
         (x == 0 && y == 2) ||
-        (x == 2 && y == 2) ||
+        (x == 2 && y == 0) ||
         (x == 2 && y == 2)) {
         return ANGLE;
     }
@@ -90,6 +90,46 @@ void Tictactoe::env_move(int x, int y) {
             a = i / 3;
             b = i % 3;
             if (map[a][b] == ' ' && check_place(a, b) == SIDE) {
+                map[a][b] = env;
+                print_field();
+                return;
+            }
+        }
+    }
+    if (first_move == ANGLE) {
+        if (filled == 1) {
+            // move to center
+            map[1][1] = env;
+            print_field();
+            return;
+        }
+        if (move == ANGLE) {
+            // situation:
+            // --X
+            // -0-
+            // X--
+            // just random SIDE place
+            map[0][1] = env;
+            print_field();
+            return;
+        }
+        if (move == SIDE) {
+            int a, b;
+            // place 0 near X on the SIDE:
+            // --X
+            // -0-
+            // -X0 <- here - don't work correctly,
+            // but env don't lose
+            a = y;
+            b = firstx;
+            if (check_place(a, b) == ANGLE) {
+                map[a][b] = env;
+                print_field();
+                return;
+            }
+            a = firsty;
+            b = x;
+            if (check_place(a, b) == ANGLE) {
                 map[a][b] = env;
                 print_field();
                 return;
@@ -148,7 +188,10 @@ void Tictactoe::pve() {
         if (first_move == NONE) {
             // remember first player move
             first_move = check_place(x, y);
+            firstx = x;
+            firsty = y;
         }
+        move = check_place(x, y);
         if (fill_point(x, y, player)) {
             filled++;
             print_field();
