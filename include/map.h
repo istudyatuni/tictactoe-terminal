@@ -9,12 +9,19 @@ class Map {
     string field[5];
 
     char check_win();
+protected:
+    char map[3][3];
+    void set_field();
+    void v_fill_point(int x, int y, char value);
 public:
-    Map():field{"_|0|1|2|Y",
+    Map():field{"_|0|1|2|y",
                 "0| | | |",
                 "1| | | |",
                 "2| | | |",
-                "X" } {
+                "x" }, 
+           map{ {' ', ' ', ' ',},
+                {' ', ' ', ' ',},
+                {' ', ' ', ' ',}} {
     }
     void print_field();
     bool fill_point(int x, int y, char value);

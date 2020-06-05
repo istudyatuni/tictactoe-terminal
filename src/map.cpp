@@ -1,15 +1,31 @@
 #include <iostream>
+#include <string>
 
 #include "map.h"
 using std::cout;
 
-char Map::check_win() {
-    char map[3][3];
-    for (int i = 0; i < 3; ++i) {
-        for (int j = 0; j < 3; ++j) {
-            map[i][j] = field[i + 1][(j + 1) * 2];
+void Map::set_field() {
+    for (int i = 0; i < 3; ++i){
+        for (int j = 0; j < 3; ++j){
+            v_fill_point(i, j, map[i][j]);
         }
     }
+}
+
+void Map::v_fill_point(int x, int y, char value) {
+    if ((x > 2 || x < 0) && (y > 2 || y < 0)) {
+        return;
+    }
+    x++;
+    y = (y + 1) * 2;
+    if (field[x][y] != ' '){
+        return;
+    }
+    field[x][y] = value;
+    map[x - 1][y / 2 - 1] = value;
+}
+
+char Map::check_win() {
     for (int i = 0; i < 3; ++i) {//перебор строк/столбцов
         //rows
         if (map[i][0] == map[i][1] && map[i][1] == map[i][2]) {
@@ -29,6 +45,7 @@ char Map::check_win() {
     return ' ';
 }
 void Map::print_field() {
+    set_field();
     for (int i = 0; i < height; ++i){
         cout << field[i] << '\n';
     }
@@ -43,6 +60,7 @@ bool Map::fill_point(int x, int y, char value) {
         return false;
     }
     field[x][y] = value;
+    map[x - 1][y / 2 - 1] = value;
     return true;
 }
 bool Map::win() {
