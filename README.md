@@ -10,3 +10,9 @@ From folder with project:
     make
     ./game (on Linux)
 ```
+
+Or, on Windows (need Visual Studio and C++ Cmake tools for Windows - part **Desktop development with C++** and **Linux Development with C++** workloads):
+
+1. File -> Open folder
+2. Select folder "tictactoe-terminal"
+3. Choose "game.exe" from the dropdown in the Solution Explorer toolbar

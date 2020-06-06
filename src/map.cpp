@@ -1,5 +1,4 @@
 #include <iostream>
-#include <string>
 
 #include "map.h"
 using std::cout;
