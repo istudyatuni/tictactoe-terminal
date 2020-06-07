@@ -1,15 +1,5 @@
 #include <iostream>
-
 #include "map.h"
-using std::cout;
-
-void Map::set_field() {
-    for (int i = 0; i < 3; ++i){
-        for (int j = 0; j < 3; ++j){
-            v_fill_point(i, j, map[i][j]);
-        }
-    }
-}
 
 void Map::v_fill_point(int x, int y, char value) {
     bool t = fill_point(x, y, value);
@@ -33,12 +23,11 @@ char Map::check_win() {
     if (map[0][2] == map[1][1] && map[1][1] == map[2][0]) {
         return map[1][1];
     }
-    return ' ';
+    return SPACE;
 }
-void Map::print_field() {
-    set_field();
+void Map::print_field() const {
     for (int i = 0; i < height; ++i){
-        cout << field[i] << '\n';
+        std::cout << m_field[i] << '\n';
     }
 }
 bool Map::fill_point(int x, int y, char value) {
@@ -47,21 +36,21 @@ bool Map::fill_point(int x, int y, char value) {
     }
     x++;
     y = (y + 1) * 2;
-    if (field[x][y] != ' '){
+    if (m_field[x][y] != SPACE){
         return false;
     }
-    field[x][y] = value;
+    m_field[x][y] = value;
     map[x - 1][y / 2 - 1] = value;
     return true;
 }
 bool Map::win() {
     char w = check_win();
-    if (w != ' ') {
-        cout << '\n' << w << " is win!\n";
+    if (w != SPACE) {
+        std::cout << '\n' << w << " is win!\n";
         return true;
     }
-    if (filled == 9) {
-        cout << "Drawn game\n";
+    if (m_filled == 9) {
+        std::cout << "Drawn game\n";
         return true;
     }
     return false;
