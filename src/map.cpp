@@ -9,19 +9,19 @@ void Map::v_fill_point(int x, int y, char value) {
 char Map::check_win() {
     for (int i = 0; i < 3; ++i) {//перебор строк/столбцов
         //rows
-        if (map[i][0] == map[i][1] && map[i][1] == map[i][2]) {
-            return map[i][0];
+        if (map(i, 0) == map(i, 1) && map(i, 1) == map(i, 2)) {
+            return map(i, 0);
         }
         // columns
-        if (map[0][i] == map[1][i] && map[1][i] == map[2][i]){
-            return map[0][i];
+        if (map(0, i) == map(1, i) && map(1, i) == map(2, i)){
+            return map(0, i);
         }
     }
-    if (map[0][0] == map[1][1] && map[1][1] == map[2][2]) {
-        return map[1][1];
+    if (map(0, 0) == map(1, 1) && map(1, 1) == map(2, 2)) {
+        return map(1, 1);
     }
-    if (map[0][2] == map[1][1] && map[1][1] == map[2][0]) {
-        return map[1][1];
+    if (map(0, 2) == map(1, 1) && map(1, 1) == map(2, 0)) {
+        return map(1, 1);
     }
     return SPACE;
 }
@@ -40,7 +40,7 @@ bool Map::fill_point(int x, int y, char value) {
         return false;
     }
     m_field[x][y] = value;
-    map[x - 1][y / 2 - 1] = value;
+    _map[x - 1][y / 2 - 1] = value;
     return true;
 }
 bool Map::win() {

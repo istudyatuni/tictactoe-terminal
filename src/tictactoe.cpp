@@ -3,7 +3,7 @@
 
 bool Tictactoe::win_check_line(char a, char b, int x, int y,
                     char p, char o) {//x, y for map[][]
-    if (map[x][y] == SPACE && a == b) {
+    if (map(x, y) == SPACE && a == b) {
         if (a == p) {//player может выиграть
             v_fill_point(x, y, p);
             //map[x][y] = p;
@@ -23,27 +23,27 @@ bool Tictactoe::win_right_now(char player, char opponent) {
     for (int i = 0; i < 3; ++i) {//перебираем строки/столбцы
         for (int j = 0; j < 3; ++j) {//перебираем элементы внутри
             // rows
-            a = map[i][(j + 1) % 3];
-            b = map[i][(j + 2) % 3];
+            a = map(i, (j + 1) % 3);
+            b = map(i, (j + 2) % 3);
             if (win_check_line(a, b, i, j, player, opponent)) {
                 return true;
             }
             // columns
-            a = map[(j + 1) % 3][i];
-            b = map[(j + 2) % 3][i];
+            a = map((j + 1) % 3, i);
+            b = map((j + 2) % 3, i);
             if (win_check_line(a, b, j, i, player, opponent)) {
                 return true;
             }
         }
         // main diagonal
-        a = map[(i + 1) % 3][(i + 1) % 3];
-        b = map[(i + 2) % 3][(i + 2) % 3];
+        a = map((i + 1) % 3, (i + 1) % 3);
+        b = map((i + 2) % 3, (i + 2) % 3);
         if (win_check_line(a, b, i, i, player, opponent)) {
             return true;
         }
         // anti-diagonal
-        a = map[(i + 1) % 3][(i + 2) * 2 % 3];
-        b = map[(i + 2) % 3][(i + 3) * 2 % 3];
+        a = map((i + 1) % 3, (i + 2) * 2 % 3);
+        b = map((i + 2) % 3, (i + 3) * 2 % 3);
         if (win_check_line(a, b, i, (i + 1) * 2 % 3, player, opponent)) {
             return true;
         }
@@ -51,21 +51,21 @@ bool Tictactoe::win_right_now(char player, char opponent) {
     return false;
 }
 
-int Tictactoe::check_place(int x, int y) {
+Place Tictactoe::check_place(int x, int y) {
     // in map 3x3
     if ((x == 0 && y == 0) ||
         (x == 0 && y == 2) ||
         (x == 2 && y == 0) ||
         (x == 2 && y == 2)) {
-        return ANGLE;
+        return Place::ANGLE;
     }
     if ((x == 0 && y == 1) ||
         (x == 1 && y == 0) ||
         (x == 2 && y == 1) ||
         (x == 1 && y == 2)) {
-        return SIDE;
+        return Place::SIDE;
     } else { // x == 1 && y == 1
-        return CENTER;
+        return Place::CENTER;
     }
 }
 
@@ -74,12 +74,12 @@ void Tictactoe::env_move(int x, int y) {
         print_field();
         return;
     }
-    if (m_first_move == CENTER) {
+    if (m_first_move == Place::CENTER) {
         int a, b;
         for (int i = 0; i < 9; ++i) {
             a = i / 3;
             b = i % 3;
-            if (map[a][b] == SPACE && check_place(a, b) == ANGLE) {
+            if (map(a, b) == SPACE && check_place(a, b) == Place::ANGLE) {
                 v_fill_point(a, b, m_env);
                 print_field();
                 return;
@@ -89,21 +89,21 @@ void Tictactoe::env_move(int x, int y) {
         for (int i = 0; i < 9; ++i) {
             a = i / 3;
             b = i % 3;
-            if (map[a][b] == SPACE && check_place(a, b) == SIDE) {
+            if (map(a, b) == SPACE && check_place(a, b) == Place::SIDE) {
                 v_fill_point(a, b, m_env);
                 print_field();
                 return;
             }
         }
     }
-    if (m_first_move == ANGLE) {
-        if (m_filled == 1) {
+    if (m_first_move == Place::ANGLE) {
+        if (filled() == 1) {
             // move to center
             v_fill_point(1, 1, m_env);
             print_field();
             return;
         }
-        if (m_move == ANGLE) {
+        if (m_move == Place::ANGLE) {
             // situation:
             // --X
             // -0-
@@ -113,7 +113,7 @@ void Tictactoe::env_move(int x, int y) {
             print_field();
             return;
         }
-        if (m_move == SIDE) {
+        if (m_move == Place::SIDE) {
             int a, b;
             // place 0 near X on the SIDE:
             // --X
@@ -122,29 +122,29 @@ void Tictactoe::env_move(int x, int y) {
             // but env don't lose
             a = y;
             b = m_firstx;
-            if (check_place(a, b) == ANGLE) {
+            if (check_place(a, b) == Place::ANGLE) {
                 v_fill_point(a, b, m_env);
                 print_field();
                 return;
             }
             a = m_firsty;
             b = x;
-            if (check_place(a, b) == ANGLE) {
+            if (check_place(a, b) == Place::ANGLE) {
                 v_fill_point(a, b, m_env);
                 print_field();
                 return;
             }
         }
     }
-    if (m_first_move == SIDE) {
-        if (m_filled == 1) {
+    if (m_first_move == Place::SIDE) {
+        if (filled() == 1) {
             // move to center
             v_fill_point(1, 1, m_env);
             print_field();
             return;
         }
-        if (m_move == ANGLE) {
-            if (m_filled == 5) {
+        if (m_move == Place::ANGLE) {
+            if (filled() == 5) {
                 // in this case:
                 // 0X0 <- set in angle
                 // X0-
@@ -175,7 +175,7 @@ void Tictactoe::env_move(int x, int y) {
                 return;
             }
         }
-        if (m_move == SIDE) {
+        if (m_move == Place::SIDE) {
             if (x == m_firstx || y == m_firsty) {
                 // противоположная сторона
                 // just random angle
@@ -209,7 +209,7 @@ void Tictactoe::pvp() {
         }
         std::cin >> s >> y;
         if (fill_point(x, y, player)) {
-            m_filled++;
+            inc_filled();
             print_field();
             if (win()) {
                 break;
@@ -241,7 +241,7 @@ void Tictactoe::pve() {
             break;
         }
         std::cin >> s >> y;
-        if (m_first_move == NONE) {
+        if (m_first_move == Place::NONE) {
             // remember first player move
             m_first_move = check_place(x, y);
             m_firstx = x;
@@ -249,13 +249,13 @@ void Tictactoe::pve() {
         }
         m_move = check_place(x, y);
         if (fill_point(x, y, m_player)) {
-            m_filled++;
+            inc_filled();
             print_field();
             if (win()) {
                 break;
             }
             env_move(x, y);
-            m_filled++;
+            inc_filled();
             if (win()) {
                 break;
             }
