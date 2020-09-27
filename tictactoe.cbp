@@ -12,7 +12,6 @@
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
-					<Add option="-I" />
 					<Add directory="include" />
 				</Compiler>
 			</Target>
@@ -22,6 +21,7 @@
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
+					<Add directory="include" />
 					<Add option="-O2" />
 				</Compiler>
 				<Linker>
