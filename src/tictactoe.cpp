@@ -182,15 +182,18 @@ void Tictactoe::pvp() {
     int x, y;
     char s, player = 'X';
 
+    const char* RED = "\x1B[31m";
+    const char* NC   = "\033[0m"; // No Color
+
     system(CLEAR);
-    printf("Enter coordinates as x,y. For stop enter -1\n");
+    printf("\n%sEnter coordinates as x,y.%s For stop enter -1\n", RED, NC);
     print_field();
     do {
         s = '.';// disable infinity loop when tap ctrl+d
         printf("%c move: ", player);
         scanf("%i", &x);
         if (x == -1) {
-            printf("Drawn game\n");
+            printf("Interrupt\n");
             break;
         }
         scanf("%c%i", &s, &y);

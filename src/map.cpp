@@ -58,7 +58,7 @@ bool Map::fill_point(int x, int y, char value) {
 bool Map::win() {
     char w = check_win();
     if (w != SPACE) {
-        printf("\n%c is win!\n", w);
+        printf("\n%c wins!\n", w);
         return true;
     }
     if (m_filled == 9) {
