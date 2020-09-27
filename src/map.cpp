@@ -3,6 +3,8 @@
 
 void Map::v_fill_point(int x, int y, char value) {
     bool t = fill_point(x, y, value);
+    // for suppress -Wunused-variable, it's do nothing
+    x = t;
     return;
 }
 
