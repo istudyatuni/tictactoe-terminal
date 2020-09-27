@@ -1,8 +1,13 @@
 #ifndef TIC_TAC_TOE_H
 #define TIC_TAC_TOE_H
 
-#include <iostream>
 #include "map.h"
+
+#ifdef _WIN32
+ #define CLEAR "cls"
+#else
+ #define CLEAR "clear"
+#endif
 
 enum class Place {
     NONE,
@@ -15,7 +20,7 @@ class Tictactoe: public Map
 {
     char m_player, m_env;
     int m_firstx, m_firsty; // for pve
-    
+
     Place m_move;
     Place m_first_move = Place::NONE;
 

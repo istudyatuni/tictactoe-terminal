@@ -1,4 +1,4 @@
-#include <iostream>
+#include <cstdio>
 #include "map.h"
 
 void Map::v_fill_point(int x, int y, char value) {
@@ -26,31 +26,41 @@ char Map::check_win() {
     return SPACE;
 }
 void Map::print_field() const {
-    for (int i = 0; i < height; ++i){
-        std::cout << m_field[i] << '\n';
+    const char* CYAN = "\x1B[96m";
+    const char* NC   = "\033[0m"; // No Color
+    char e;
+    printf("x\t\b\by 0\t1\t2\n\n");
+    for (int i = 0; i < 3; ++i){
+        printf("%i\t", i);
+        for (int j = 0; j < 3; ++j) {
+            e = map(i, j);
+            if (e == SPACE) {
+                e = '.';
+            }
+            // print with cyan color
+            printf("%s%c%s\t", CYAN, e, NC);
+        }
+        printf("\n\n");
     }
 }
 bool Map::fill_point(int x, int y, char value) {
     if ((x > 2 || x < 0) && (y > 2 || y < 0)) {
         return false;
     }
-    x++;
-    y = (y + 1) * 2;
-    if (m_field[x][y] != SPACE){
+    if (map(x, y) != SPACE){
         return false;
     }
-    m_field[x][y] = value;
-    _map[x - 1][y / 2 - 1] = value;
+    _map[x][y] = value;
     return true;
 }
 bool Map::win() {
     char w = check_win();
     if (w != SPACE) {
-        std::cout << '\n' << w << " is win!\n";
+        printf("\n%c is win!\n", w);
         return true;
     }
     if (m_filled == 9) {
-        std::cout << "Drawn game\n";
+        printf("Drawn game\n");
         return true;
     }
     return false;

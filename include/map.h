@@ -3,7 +3,6 @@
 
 class Map {
     static const int height = 5;
-    std::string m_field[height];
     char _map[3][3];
 
     int m_filled = 0;// aka size and moves count
@@ -14,12 +13,7 @@ protected:
 public:
     static const char SPACE = ' ';
 
-    Map():m_field{"_|0|1|2|y",
-                  "0| | | |",
-                  "1| | | |",
-                  "2| | | |",
-                 "x" }, 
-           _map{{ SPACE, SPACE, SPACE },
+    Map(): _map{{ SPACE, SPACE, SPACE },
                 { SPACE, SPACE, SPACE },
                 { SPACE, SPACE, SPACE }} {
     }
@@ -27,7 +21,7 @@ public:
     bool fill_point(int x, int y, char value);
     bool win();
 
-    char map(int x, int y) {
+    char map(int x, int y) const {
         return _map[x][y];
     }
     int filled() {

@@ -1,4 +1,6 @@
 #!/bin/bash
+clear
+
 exec_name=game
 
 # BUILD=Release

@@ -6,12 +6,10 @@ bool Tictactoe::win_check_line(char a, char b, int x, int y,
     if (map(x, y) == SPACE && a == b) {
         if (a == p) {//player может выиграть
             v_fill_point(x, y, p);
-            //map[x][y] = p;
             return true;
         }
         if (a == o) {//противник player-а может выиграть
             v_fill_point(x, y, p);
-            //map[x][y] = p;
             return true;
         }
     }
@@ -71,7 +69,6 @@ Place Tictactoe::check_place(int x, int y) {
 
 void Tictactoe::env_move(int x, int y) {
     if (win_right_now(m_env, m_player)) {
-        print_field();
         return;
     }
     if (m_first_move == Place::CENTER) {
@@ -81,7 +78,6 @@ void Tictactoe::env_move(int x, int y) {
             b = i % 3;
             if (map(a, b) == SPACE && check_place(a, b) == Place::ANGLE) {
                 v_fill_point(a, b, m_env);
-                print_field();
                 return;
             }
         }
@@ -91,7 +87,6 @@ void Tictactoe::env_move(int x, int y) {
             b = i % 3;
             if (map(a, b) == SPACE && check_place(a, b) == Place::SIDE) {
                 v_fill_point(a, b, m_env);
-                print_field();
                 return;
             }
         }
@@ -100,7 +95,6 @@ void Tictactoe::env_move(int x, int y) {
         if (filled() == 1) {
             // move to center
             v_fill_point(1, 1, m_env);
-            print_field();
             return;
         }
         if (m_move == Place::ANGLE) {
@@ -110,7 +104,6 @@ void Tictactoe::env_move(int x, int y) {
             // X--
             // just random SIDE place
             v_fill_point(0, 1, m_env);
-            print_field();
             return;
         }
         if (m_move == Place::SIDE) {
@@ -124,14 +117,12 @@ void Tictactoe::env_move(int x, int y) {
             b = m_firstx;
             if (check_place(a, b) == Place::ANGLE) {
                 v_fill_point(a, b, m_env);
-                print_field();
                 return;
             }
             a = m_firsty;
             b = x;
             if (check_place(a, b) == Place::ANGLE) {
                 v_fill_point(a, b, m_env);
-                print_field();
                 return;
             }
         }
@@ -140,7 +131,6 @@ void Tictactoe::env_move(int x, int y) {
         if (filled() == 1) {
             // move to center
             v_fill_point(1, 1, m_env);
-            print_field();
             return;
         }
         if (m_move == Place::ANGLE) {
@@ -153,25 +143,21 @@ void Tictactoe::env_move(int x, int y) {
                 // не сломается
                 v_fill_point(0, 0, m_env);
                 v_fill_point(2, 0, m_env);
-                print_field();
                 return;
             }
             if (x == 0 && x == y) {
                 // angle (0, 0)
                 v_fill_point(2, 2, m_env);
-                print_field();
                 return;
             }
             if (x != y) {
                 // angle (x, y)
                 v_fill_point(y, x, m_env);
-                print_field();
                 return;
             }
             if (x == 2 && x == y) {
                 // angle (2, 2)
                 v_fill_point(0, 0, m_env);
-                print_field();
                 return;
             }
         }
@@ -180,7 +166,6 @@ void Tictactoe::env_move(int x, int y) {
                 // противоположная сторона
                 // just random angle
                 v_fill_point(0, 0, m_env);
-                print_field();
                 return;
             }
             // position as:
@@ -188,7 +173,6 @@ void Tictactoe::env_move(int x, int y) {
             // -0X
             // ---
             v_fill_point(x + m_firstx - 1, y + m_firsty - 1, m_env);
-            print_field();
             return;
         }
     }
@@ -197,19 +181,24 @@ void Tictactoe::env_move(int x, int y) {
 void Tictactoe::pvp() {
     int x, y;
     char s, player = 'X';
-    std::cout << "Enter coordinates as x,y. For stop enter -1\n";
+
+    system(CLEAR);
+    printf("Enter coordinates as x,y. For stop enter -1\n");
     print_field();
     do {
         s = '.';// disable infinity loop when tap ctrl+d
-        std::cout << player << " move: ";
-        std::cin >> x;
+        printf("%c move: ", player);
+        scanf("%i", &x);
         if (x == -1) {
-            std::cout << "Drawn game\n";
+            printf("Drawn game\n");
             break;
         }
-        std::cin >> s >> y;
+        scanf("%c%i", &s, &y);
         if (fill_point(x, y, player)) {
+            system(CLEAR);
+
             inc_filled();
+            printf("Player %c move:\n", player);
             print_field();
             if (win()) {
                 break;
@@ -220,7 +209,7 @@ void Tictactoe::pvp() {
                 player = 'X';
             }
         } else {
-            std::cout << "Incorrect. Try again\n";
+            printf("Incorrect. Try again\n");
         }
     } while(s == ',');
 }
@@ -230,17 +219,19 @@ void Tictactoe::pve() {
     m_env = '0';
     int x, y;
     char s;
-    std::cout << "Enter coordinates as x,y. For stop enter -1\n";
+
+    system(CLEAR);
+    printf("Enter coordinates as x,y. For stop enter -1\n");
     print_field();
     do {
         s = '.';
-        std::cout << m_player << " move: ";
-        std::cin >> x;
+        printf("%c move: ", m_player);
+        scanf("%i", &x);
         if (x == -1) {
-            std::cout << "Drawn game\n";
+            printf("Interrupt\n");
             break;
         }
-        std::cin >> s >> y;
+        scanf("%c%i", &s, &y);
         if (m_first_move == Place::NONE) {
             // remember first player move
             m_first_move = check_place(x, y);
@@ -249,31 +240,36 @@ void Tictactoe::pve() {
         }
         m_move = check_place(x, y);
         if (fill_point(x, y, m_player)) {
+            system(CLEAR);
+
             inc_filled();
+            printf("Player move:\n");
             print_field();
             if (win()) {
                 break;
             }
             env_move(x, y);
+            printf("Env move:\n");
+            print_field();
             inc_filled();
             if (win()) {
                 break;
             }
         } else {
-            std::cout << "Incorrect. Try again\n";
+            printf("Incorrect. Try again\n");
         }
     } while(s == ',');
 }
 
 void Tictactoe::play() {
     int mode;
-    std::cout << "Choose mode (1 - pve, 2 - pvp): ";
-    std::cin >> mode;
+    printf("Choose mode (1 - pve, 2 - pvp): ");
+    scanf("%i", &mode);
     if (mode == 1) {
         pve();
     } else if (mode == 2) {
         pvp();
     } else {
-        std::cout << "Incorrect\n";
+        printf("Incorrect\n");
     }
 }
