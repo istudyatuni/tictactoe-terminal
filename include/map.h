@@ -3,19 +3,22 @@
 
 class Map {
     static const int height = 5;
-    char _map[3][3];
+    char _map[3][3] = {};
 
     int m_filled = 0;// aka size and moves count
 
     char check_win();
 protected:
     void v_fill_point(int x, int y, char value);
+    void init() {
+        _map[0][0] = _map[0][1] = _map[0][2] = _map[1][0] = _map[1][1] = _map[1][2] =
+        _map[2][0] = _map[2][1] = _map[2][2] = SPACE;
+    }
 public:
     static const char SPACE = ' ';
 
-    Map(): _map{{ SPACE, SPACE, SPACE },
-                { SPACE, SPACE, SPACE },
-                { SPACE, SPACE, SPACE }} {
+    Map() {
+        init();
     }
     void print_field() const;
     bool fill_point(int x, int y, char value);

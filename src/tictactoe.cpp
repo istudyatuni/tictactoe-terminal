@@ -263,13 +263,16 @@ void Tictactoe::pve() {
 
 void Tictactoe::play() {
     int mode;
-    printf("Choose mode (1 - pve, 2 - pvp): ");
-    scanf("%i", &mode);
-    if (mode == 1) {
-        pve();
-    } else if (mode == 2) {
-        pvp();
-    } else {
-        printf("Incorrect\n");
-    }
+    do {
+        init();
+        printf("Choose mode (1 - pve, 2 - pvp, -1 for exit): ");
+        scanf("%i", &mode);
+        if (mode == 1) {
+            pve();
+        } else if (mode == 2) {
+            pvp();
+        } else {
+            printf("Incorrect\n");
+        }
+    } while(mode != -1);
 }
